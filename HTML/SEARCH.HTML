@@ -14,16 +14,19 @@
             background-color: #f0f2f5;
         }
 
+        /* Responsive Wrapper */
         .main-wrapper {
             display: flex;
             flex-direction: row;
+            /* Default: Side-by-side for desktop */
             height: 100vh;
             width: 100%;
         }
 
-        /* LEFT SIDE */
+        /* LEFT SIDE: Search Panel */
         .left-panel {
-            flex: 0 0 400px;
+            flex: 0 0 350px;
+            /* Fixed width on desktop */
             display: flex;
             justify-content: center;
             align-items: center;
@@ -33,13 +36,13 @@
         }
 
         .search-container {
-            padding: 30px;
+            padding: 20px;
             text-align: center;
-            width: 80%;
+            width: 90%;
         }
 
         label {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             color: #1a73e8;
             display: block;
             margin-bottom: 15px;
@@ -53,12 +56,7 @@
             border-radius: 24px;
             font-size: 16px;
             outline: none;
-            transition: border 0.3s;
             box-sizing: border-box;
-        }
-
-        input[type="text"]:focus {
-            border-color: #1a73e8;
         }
 
         button {
@@ -72,23 +70,19 @@
             font-size: 16px;
             font-weight: bold;
             cursor: pointer;
-            transition: background-color 0.2s;
         }
 
-        button:hover {
-            background-color: #1557b0;
-        }
-
-        /* RIGHT SIDE */
+        /* RIGHT SIDE: Results Panel */
         .right-panel {
             flex: 1;
-            padding: 40px;
+            padding: 20px;
             background-color: #f8f9fa;
             overflow-y: auto;
         }
 
         h2 {
             margin-top: 0;
+            font-size: 1.2rem;
             color: #3c4043;
             border-bottom: 3px solid #1a73e8;
             display: inline-block;
@@ -97,54 +91,70 @@
 
         .card-container {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 20px;
-            margin-top: 30px;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
         }
 
         .card {
             background: white;
-            padding: 20px;
+            padding: 15px;
             border-radius: 12px;
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
             border-left: 5px solid #1a73e8;
-            transition: all 0.3s ease;
             word-wrap: break-word;
             overflow-wrap: break-word;
             word-break: break-word;
-        }
-
-        .card:hover {
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
-            transform: translateY(-3px);
-        }
-
-        .data-row {
-            margin-bottom: 12px;
         }
 
         .data-label {
             font-weight: bold;
             color: #202124;
             text-transform: uppercase;
-            font-size: 11px;
+            font-size: 10px;
             display: block;
-            margin-bottom: 2px;
         }
 
         .data-value {
-            font-size: 15px;
+            font-size: 14px;
             color: #5f6368;
-            line-height: 1.4;
         }
 
-        .no-data {
-            text-align: center;
-            color: #d93025;
-            font-weight: bold;
-            font-size: 1.2rem;
-            margin-top: 50px;
-            grid-column: 1 / -1;
+        /* --- MOBILE & TABLET COMPATIBILITY --- */
+        @media (max-width: 768px) {
+            .main-wrapper {
+                flex-direction: column;
+                /* Stack vertically on mobile/tablets */
+                height: auto;
+            }
+
+            .left-panel {
+                flex: none;
+                width: 100%;
+                border-right: none;
+                border-bottom: 1px solid #ddd;
+                padding: 20px 0;
+                position: sticky;
+                /* Keep search bar at top while scrolling results */
+                top: 0;
+            }
+
+            .right-panel {
+                padding: 15px;
+                overflow-y: visible;
+                /* Let the body handle scrolling */
+            }
+
+            .card-container {
+                grid-template-columns: 1fr;
+                /* One card per row on small phones */
+            }
+
+            h2 {
+                font-size: 1rem;
+                display: block;
+                text-align: center;
+            }
         }
     </style>
 </head>
@@ -163,7 +173,7 @@
         <div class="right-panel">
             <h2>SEARCH RESULTS</h2>
             <div id="cardContainer" class="card-container">
-                <p style="color: #70757a;">Results will appear here based on your search query.</p>
+                <p style="color: #70757a; text-align: center;">Results will appear here...</p>
             </div>
         </div>
     </div>
@@ -181,11 +191,11 @@
             const userInput = keywordInput.value.toLowerCase().trim();
 
             if (!userInput) {
-                container.innerHTML = "<p style='color: orange;'>Please enter a keyword to search.</p>";
+                container.innerHTML = "<p style='color: orange; text-align: center;'>Please enter a keyword.</p>";
                 return;
             }
 
-            container.innerHTML = "<p>Searching database...</p>";
+            container.innerHTML = "<p style='text-align: center;'>Searching...</p>";
 
             fetch(url)
                 .then(res => res.text())
@@ -196,10 +206,8 @@
                     container.innerHTML = "";
                     let foundAnyMatch = false;
 
-                    // UPDATED: Added 'rowIndex' to skip the first row
                     rows.forEach((row, rowIndex) => {
-                        // Skip the first row (Index 0)
-                        if (rowIndex === 0) return;
+                        if (rowIndex === 0) return; // Skip Header
 
                         const rowMatches = row.c.some(cell => {
                             if (!cell || !cell.v) return false;
@@ -213,15 +221,10 @@
 
                             let cardContent = "";
                             row.c.forEach((cell, index) => {
-                                let labelText = "";
-                                if (index === 0) labelText = "Bank Name";
-                                else if (index === 1) labelText = "Bank email id";
-                                else labelText = `Additional Info ${index - 1}`;
-
+                                let labelText = (index === 0) ? "Bank Name" : (index === 1) ? "Bank email id" : `Info ${index - 1}`;
                                 const value = cell ? cell.v : "N/A";
-
                                 cardContent += `
-                                    <div class="data-row">
+                                    <div style="margin-bottom:10px;">
                                         <span class="data-label">${labelText}</span>
                                         <span class="data-value">${value}</span>
                                     </div>`;
@@ -233,12 +236,11 @@
                     });
 
                     if (!foundAnyMatch) {
-                        container.innerHTML = `<div class="no-data">NO DATA FOUND</div>`;
+                        container.innerHTML = `<div style="text-align:center; color:red; font-weight:bold; width:100%;">NO DATA FOUND</div>`;
                     }
                 })
                 .catch(err => {
-                    console.error("Error:", err);
-                    container.innerHTML = "<p style='color:red;'>Error connecting to the database.</p>";
+                    container.innerHTML = "<p style='color:red; text-align:center;'>Error fetching data.</p>";
                 });
         });
     </script>
