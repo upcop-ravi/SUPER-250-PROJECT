@@ -5,9 +5,10 @@
     <title>Bank List</title>
     <style>
         body {
-            font-family: Arial;
+            font-family: Arial, sans-serif;
             background: #f4f4f4;
             text-align: center;
+            padding: 20px;
         }
 
         .container {
@@ -23,16 +24,24 @@
             width: 250px;
             border-radius: 10px;
             box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
         }
 
         .bank-name {
             font-size: 18px;
             font-weight: bold;
+            color: #0078d7;
         }
 
         .email {
             color: #555;
             margin-top: 8px;
+            word-wrap: break-word;
+            /* Prevents long emails from breaking the card */
         }
     </style>
 </head>
@@ -44,35 +53,42 @@
     <div class="container" id="cardContainer"></div>
 
     <script>
-        const sheetID = "YOUR_SHEET_ID";
+        const sheetID = "1VPD21zY1KbFAC9-OOdGKndZBy_YhYUMH7dbNm3U06Q4";
         const sheetName = "Sheet1";
 
-        // Google Visualization API URL
-        const url = https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?sheet=${sheetName};
+        // FIX: Added backticks and used variable interpolation
+        const url = `https://docs.google.com/spreadsheets/d/1VPD21zY1KbFAC9-OOdGKndZBy_YhYUMH7dbNm3U06Q4/gviz/tq?sheet=Sheet1`;
 
-            fetch(url)
-                .then(res => res.text())
-                .then(data => {
-                    const json = JSON.parse(data.substr(47).slice(0, -2));
-                    const rows = json.table.rows;
+        fetch(url)
+            .then(res => res.text())
+            .then(data => {
+                // The Google API returns a string starting with "/*O_o*/" 
+                // and ending with a callback. We strip the extra characters:
+                const json = JSON.parse(data.substr(47).slice(0, -2));
+                const rows = json.table.rows;
 
-                    const container = document.getElementById("cardContainer");
+                const container = document.getElementById("cardContainer");
 
-                    rows.forEach(row => {
-                        const bankName = row.c[0]?.v || "";
-                        const email = row.c[1]?.v || "";
+                rows.forEach(row => {
+                    // Extracting values from the Google Sheets JSON structure
+                    const bankName = row.c[0] ? row.c[0].v : "N/A";
+                    const email = row.c[1] ? row.c[1].v : "N/A";
 
-                        const card = document.createElement("div");
-                        card.className = "card";
+                    const card = document.createElement("div");
+                    card.className = "card";
 
-                        card.innerHTML = `
-            <div class="bank-name">${bankName}</div>
-            <div class="email">${email}</div>
-        `;
+                    card.innerHTML = `
+                        <div class="bank-name">${bankName}</div>
+                        <div class="email">${email}</div>
+                    `;
 
-                        container.appendChild(card);
-                    });
+                    container.appendChild(card);
                 });
+            })
+            .catch(err => {
+                console.error("Error fetching data:", err);
+                document.getElementById("cardContainer").innerText = "Failed to load bank details.";
+            });
     </script>
 
 </body>
