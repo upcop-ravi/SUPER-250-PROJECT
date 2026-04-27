@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Bank List</title>
+    <style>
+        body {
+            font-family: Arial;
+            background: #f4f4f4;
+            text-align: center;
+        }
+
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .card {
+            background: white;
+            padding: 15px;
+            margin: 10px;
+            width: 250px;
+            border-radius: 10px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        .bank-name {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .email {
+            color: #555;
+            margin-top: 8px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h2>Bank Details</h2>
+
+    <div class="container" id="cardContainer"></div>
+
+    <script>
+        const sheetID = "YOUR_SHEET_ID";
+        const sheetName = "Sheet1";
+
+        // Google Visualization API URL
+        const url = https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?sheet=${sheetName};
+
+            fetch(url)
+                .then(res => res.text())
+                .then(data => {
+                    const json = JSON.parse(data.substr(47).slice(0, -2));
+                    const rows = json.table.rows;
+
+                    const container = document.getElementById("cardContainer");
+
+                    rows.forEach(row => {
+                        const bankName = row.c[0]?.v || "";
+                        const email = row.c[1]?.v || "";
+
+                        const card = document.createElement("div");
+                        card.className = "card";
+
+                        card.innerHTML = `
+            <div class="bank-name">${bankName}</div>
+            <div class="email">${email}</div>
+        `;
+
+                        container.appendChild(card);
+                    });
+                });
+    </script>
+
+</body>
+
+</html>
