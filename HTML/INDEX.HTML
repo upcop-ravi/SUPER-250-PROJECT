@@ -6,13 +6,43 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Search Nodal Contact Details</title>
     <style>
-        body {
+        /* Reset and layout */
+        body,
+        html {
+            height: 100%;
+            margin: 0;
             font-family: Arial, sans-serif;
             background-color: #f5f5f5;
+        }
+
+        /* Main wrapper to split the screen */
+        .main-wrapper {
+            display: flex;
+            flex-direction: row;
+            /* Horizontal split */
+            height: 100vh;
+            width: 100%;
+        }
+
+        /* Left Side: Search Panel */
+        .left-panel {
+            flex: 1;
+            /* Takes up 50% */
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            border-right: 2px solid #ddd;
+            background-color: #f9f9f9;
+        }
+
+        /* Right Side: Results Panel */
+        .right-panel {
+            flex: 1;
+            /* Takes up 50% */
+            padding: 40px;
+            background-color: #ffffff;
+            overflow-y: auto;
+            /* Scroll if results are long */
         }
 
         .search-container {
@@ -21,6 +51,13 @@
             border-radius: 8px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
             text-align: center;
+        }
+
+        h2 {
+            margin-top: 0;
+            color: #333;
+            border-bottom: 2px solid #0078d7;
+            padding-bottom: 10px;
         }
 
         label {
@@ -41,7 +78,7 @@
 
         button {
             padding: 10px 20px;
-            margin-left: 10px;
+            margin-top: 10px;
             background-color: #0078d7;
             color: white;
             border: none;
@@ -54,16 +91,59 @@
         button:hover {
             background-color: #005ea3;
         }
+
+        .result-item {
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px dashed #ccc;
+            border-radius: 5px;
+            color: #555;
+        }
     </style>
 </head>
 
 <body>
 
-    <div class="search-container">
-        <label for="keyword">Search Nodal Contact Details</label>
-        <input type="text" id="keyword" name="keyword" placeholder="Enter keyword">
-        <button id="search" name="search">Search</button>
+    <div class="main-wrapper">
+        <div class="left-panel">
+            <div class="search-container">
+                <label for="keyword">Search Nodal Contact Details</label>
+                <input type="text" id="keyword" name="keyword" placeholder="Enter keyword">
+                <br>
+                <button id="search" name="search">Search</button>
+            </div>
+        </div>
+
+        <div class="right-panel">
+            <h2>SEARCH RESULTS</h2>
+            <div id="results-display">
+                <p style="color: #888;">Enter a keyword and click search to see contact details here...</p>
+            </div>
+        </div>
     </div>
+
+    <script>
+        // Logic to handle the display of results on the right
+        const searchBtn = document.getElementById('search');
+        const keywordInput = document.getElementById('keyword');
+        const resultsDisplay = document.getElementById('results-display');
+
+        searchBtn.addEventListener('click', () => {
+            const val = keywordInput.value;
+            if (val.trim() === "") {
+                resultsDisplay.innerHTML = "<p style='color:red;'>Please enter a keyword.</p>";
+            } else {
+                resultsDisplay.innerHTML = `
+          <div class="result-item">
+            <strong>Showing results for:</strong> ${val}<br><br>
+            <p>Nodal Officer: John Doe</p>
+            <p>Email: contact@department.gov</p>
+            <p>Phone: +1 234-567-890</p>
+          </div>
+        `;
+            }
+        });
+    </script>
 
 </body>
 
