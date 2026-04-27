@@ -37,13 +37,14 @@
             width: 90%;
         }
 
-        /* Radio Button Styling */
+        /* Radio Group Styling */
         .radio-group {
             display: flex;
-            justify-content: space-around;
+            flex-direction: column;
+            align-items: flex-start;
             margin-bottom: 20px;
             background: #f8f9fa;
-            padding: 10px;
+            padding: 15px;
             border-radius: 12px;
             border: 1px solid #dfe1e5;
         }
@@ -55,11 +56,11 @@
             color: #3c4043;
             cursor: pointer;
             font-weight: 500;
+            margin: 5px 0;
         }
 
         .radio-option input {
-            margin-right: 5px;
-            cursor: pointer;
+            margin-right: 10px;
         }
 
         label.search-label {
@@ -150,16 +151,6 @@
                 border-right: none;
                 border-bottom: 1px solid #ddd;
                 padding: 20px 0;
-                position: sticky;
-                top: 0;
-            }
-
-            .right-panel {
-                padding: 15px;
-            }
-
-            .card-container {
-                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -172,18 +163,18 @@
             <div class="search-container">
                 <div class="radio-group">
                     <label class="radio-option">
-                        <input type="radio" name="category" value="Banks" checked> Banks
+                        <input type="radio" name="category" value="Sheet1" checked> 1- Banks
                     </label>
                     <label class="radio-option">
-                        <input type="radio" name="category" value="TPAP"> TPAP
+                        <input type="radio" name="category" value="Sheet2"> 2- TPAP
                     </label>
                     <label class="radio-option">
-                        <input type="radio" name="category" value="Wallet & PPI"> Wallet & PPI
+                        <input type="radio" name="category" value="Sheet3"> 3- Wallet & PPI
                     </label>
                 </div>
 
                 <label class="search-label" for="keyword">Search Bank Nodal Email</label>
-                <input type="text" id="keyword" placeholder="Enter Name">
+                <input type="text" id="keyword" placeholder="Enter keyword...">
                 <button id="searchBtn">Search</button>
             </div>
         </div>
@@ -198,7 +189,6 @@
 
     <script>
         const sheetID = "1VPD21zY1KbFAC9-OOdGKndZBy_YhYUMH7dbNm3U06Q4";
-
         const searchBtn = document.getElementById('searchBtn');
         const keywordInput = document.getElementById('keyword');
         const container = document.getElementById('cardContainer');
@@ -206,22 +196,23 @@
         searchBtn.addEventListener('click', () => {
             const userInput = keywordInput.value.toLowerCase().trim();
 
-            // Logic to get the selected sheet name from radio buttons
-            const selectedSheet = document.querySelector('input[name="category"]:checked').value;
+            // Get the value of the selected radio (Sheet1, Sheet2, or Sheet3)
+            const selectedSheetName = document.querySelector('input[name="category"]:checked').value;
 
-            // Update URL dynamically based on selection
-            const url = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?sheet=${encodeURIComponent(selectedSheet)}`;
+            // Construct the dynamic URL for the Google Sheet Visualization API
+            const url = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?sheet=${selectedSheetName}`;
 
             if (!userInput) {
                 container.innerHTML = "<p style='color: orange; text-align: center;'>Please enter a keyword.</p>";
                 return;
             }
 
-            container.innerHTML = "<p style='text-align: center;'>Searching in " + selectedSheet + "...</p>";
+            container.innerHTML = "<p style='text-align: center;'>Searching in " + selectedSheetName + "...</p>";
 
             fetch(url)
                 .then(res => res.text())
                 .then(data => {
+                    // Clean the Google Sheets JSON response (starts with "/* google.visualization.Query.setResponse...")
                     const json = JSON.parse(data.substr(47).slice(0, -2));
                     const rows = json.table.rows;
 
@@ -229,7 +220,8 @@
                     let foundAnyMatch = false;
 
                     rows.forEach((row, rowIndex) => {
-                        if (rowIndex === 0) return;
+                        // Optional: Skip header row if necessary.
+                        // if (rowIndex === 0) return; 
 
                         const rowMatches = row.c.some(cell => {
                             if (!cell || !cell.v) return false;
@@ -243,7 +235,8 @@
 
                             let cardContent = "";
                             row.c.forEach((cell, index) => {
-                                let labelText = (index === 0) ? "Name" : (index === 1) ? "Email ID" : `Info ${index - 1}`;
+                                // Default labels based on common column index
+                                let labelText = (index === 0) ? "Name/Bank" : (index === 1) ? "Email ID" : `Detail ${index + 1}`;
                                 const value = cell ? cell.v : "N/A";
                                 cardContent += `
                                     <div style="margin-bottom:10px;">
@@ -258,11 +251,12 @@
                     });
 
                     if (!foundAnyMatch) {
-                        container.innerHTML = `<div style="text-align:center; color:red; font-weight:bold; width:100%;">NO DATA FOUND IN ${selectedSheet.toUpperCase()}</div>`;
+                        container.innerHTML = `<div style="text-align:center; color:red; font-weight:bold; width:100%;">NO DATA FOUND IN ${selectedSheetName}</div>`;
                     }
                 })
                 .catch(err => {
-                    container.innerHTML = "<p style='color:red; text-align:center;'>Error fetching data. Check if sheet tab name matches radio value.</p>";
+                    console.error(err);
+                    container.innerHTML = "<p style='color:red; text-align:center;'>Error fetching data. Ensure the Sheet names match exactly (Sheet1, Sheet2, Sheet3).</p>";
                 });
         });
     </script>
