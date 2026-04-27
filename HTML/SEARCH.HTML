@@ -14,19 +14,15 @@
             background-color: #f0f2f5;
         }
 
-        /* Responsive Wrapper */
         .main-wrapper {
             display: flex;
             flex-direction: row;
-            /* Default: Side-by-side for desktop */
             height: 100vh;
             width: 100%;
         }
 
-        /* LEFT SIDE: Search Panel */
         .left-panel {
             flex: 0 0 350px;
-            /* Fixed width on desktop */
             display: flex;
             justify-content: center;
             align-items: center;
@@ -41,7 +37,32 @@
             width: 90%;
         }
 
-        label {
+        /* Radio Button Styling */
+        .radio-group {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 12px;
+            border: 1px solid #dfe1e5;
+        }
+
+        .radio-option {
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+            color: #3c4043;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .radio-option input {
+            margin-right: 5px;
+            cursor: pointer;
+        }
+
+        label.search-label {
             font-size: 1.1rem;
             color: #1a73e8;
             display: block;
@@ -72,7 +93,6 @@
             cursor: pointer;
         }
 
-        /* RIGHT SIDE: Results Panel */
         .right-panel {
             flex: 1;
             padding: 20px;
@@ -103,8 +123,6 @@
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
             border-left: 5px solid #1a73e8;
             word-wrap: break-word;
-            overflow-wrap: break-word;
-            word-break: break-word;
         }
 
         .data-label {
@@ -120,11 +138,9 @@
             color: #5f6368;
         }
 
-        /* --- MOBILE & TABLET COMPATIBILITY --- */
         @media (max-width: 768px) {
             .main-wrapper {
                 flex-direction: column;
-                /* Stack vertically on mobile/tablets */
                 height: auto;
             }
 
@@ -135,25 +151,15 @@
                 border-bottom: 1px solid #ddd;
                 padding: 20px 0;
                 position: sticky;
-                /* Keep search bar at top while scrolling results */
                 top: 0;
             }
 
             .right-panel {
                 padding: 15px;
-                overflow-y: visible;
-                /* Let the body handle scrolling */
             }
 
             .card-container {
                 grid-template-columns: 1fr;
-                /* One card per row on small phones */
-            }
-
-            h2 {
-                font-size: 1rem;
-                display: block;
-                text-align: center;
             }
         }
     </style>
@@ -164,8 +170,20 @@
     <div class="main-wrapper">
         <div class="left-panel">
             <div class="search-container">
-                <label for="keyword">Search Bank Nodal Email</label>
-                <input type="text" id="keyword" placeholder="Enter Bank Name">
+                <div class="radio-group">
+                    <label class="radio-option">
+                        <input type="radio" name="category" value="Banks" checked> Banks
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="category" value="TPAP"> TPAP
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="category" value="Wallet & PPI"> Wallet & PPI
+                    </label>
+                </div>
+
+                <label class="search-label" for="keyword">Search Bank Nodal Email</label>
+                <input type="text" id="keyword" placeholder="Enter Name">
                 <button id="searchBtn">Search</button>
             </div>
         </div>
@@ -180,8 +198,6 @@
 
     <script>
         const sheetID = "1VPD21zY1KbFAC9-OOdGKndZBy_YhYUMH7dbNm3U06Q4";
-        const sheetName = "Sheet1";
-        const url = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?sheet=${sheetName}`;
 
         const searchBtn = document.getElementById('searchBtn');
         const keywordInput = document.getElementById('keyword');
@@ -190,12 +206,18 @@
         searchBtn.addEventListener('click', () => {
             const userInput = keywordInput.value.toLowerCase().trim();
 
+            // Logic to get the selected sheet name from radio buttons
+            const selectedSheet = document.querySelector('input[name="category"]:checked').value;
+
+            // Update URL dynamically based on selection
+            const url = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?sheet=${encodeURIComponent(selectedSheet)}`;
+
             if (!userInput) {
                 container.innerHTML = "<p style='color: orange; text-align: center;'>Please enter a keyword.</p>";
                 return;
             }
 
-            container.innerHTML = "<p style='text-align: center;'>Searching...</p>";
+            container.innerHTML = "<p style='text-align: center;'>Searching in " + selectedSheet + "...</p>";
 
             fetch(url)
                 .then(res => res.text())
@@ -207,7 +229,7 @@
                     let foundAnyMatch = false;
 
                     rows.forEach((row, rowIndex) => {
-                        if (rowIndex === 0) return; // Skip Header
+                        if (rowIndex === 0) return;
 
                         const rowMatches = row.c.some(cell => {
                             if (!cell || !cell.v) return false;
@@ -221,7 +243,7 @@
 
                             let cardContent = "";
                             row.c.forEach((cell, index) => {
-                                let labelText = (index === 0) ? "Bank Name" : (index === 1) ? "Bank email id" : `Info ${index - 1}`;
+                                let labelText = (index === 0) ? "Name" : (index === 1) ? "Email ID" : `Info ${index - 1}`;
                                 const value = cell ? cell.v : "N/A";
                                 cardContent += `
                                     <div style="margin-bottom:10px;">
@@ -236,11 +258,11 @@
                     });
 
                     if (!foundAnyMatch) {
-                        container.innerHTML = `<div style="text-align:center; color:red; font-weight:bold; width:100%;">NO DATA FOUND</div>`;
+                        container.innerHTML = `<div style="text-align:center; color:red; font-weight:bold; width:100%;">NO DATA FOUND IN ${selectedSheet.toUpperCase()}</div>`;
                     }
                 })
                 .catch(err => {
-                    container.innerHTML = "<p style='color:red; text-align:center;'>Error fetching data.</p>";
+                    container.innerHTML = "<p style='color:red; text-align:center;'>Error fetching data. Check if sheet tab name matches radio value.</p>";
                 });
         });
     </script>
