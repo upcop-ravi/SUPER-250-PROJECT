@@ -37,7 +37,6 @@
             width: 90%;
         }
 
-        /* Radio Group Styling */
         .radio-group {
             display: flex;
             flex-direction: column;
@@ -128,15 +127,18 @@
 
         .data-label {
             font-weight: bold;
-            color: #202124;
+            color: #1a73e8;
             text-transform: uppercase;
             font-size: 10px;
             display: block;
+            margin-bottom: 2px;
         }
 
         .data-value {
             font-size: 14px;
-            color: #5f6368;
+            color: #202124;
+            display: block;
+            margin-bottom: 10px;
         }
 
         @media (max-width: 768px) {
@@ -163,13 +165,13 @@
             <div class="search-container">
                 <div class="radio-group">
                     <label class="radio-option">
-                        <input type="radio" name="category" value="Sheet1" checked> Banks
+                        <input type="radio" name="category" value="Sheet1" checked> 1- Banks
                     </label>
                     <label class="radio-option">
-                        <input type="radio" name="category" value="Sheet2"> TPAP
+                        <input type="radio" name="category" value="Sheet2"> 2- TPAP
                     </label>
                     <label class="radio-option">
-                        <input type="radio" name="category" value="Sheet3"> Wallet & PPI
+                        <input type="radio" name="category" value="Sheet3"> 3- Wallet & PPI
                     </label>
                 </div>
 
@@ -195,11 +197,7 @@
 
         searchBtn.addEventListener('click', () => {
             const userInput = keywordInput.value.toLowerCase().trim();
-
-            // Get the value of the selected radio (Sheet1, Sheet2, or Sheet3)
             const selectedSheetName = document.querySelector('input[name="category"]:checked').value;
-
-            // Construct the dynamic URL for the Google Sheet Visualization API
             const url = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?sheet=${selectedSheetName}`;
 
             if (!userInput) {
@@ -207,22 +205,25 @@
                 return;
             }
 
-            container.innerHTML = "<p style='text-align: center;'>Searching in " + selectedSheetName + "...</p>";
+            container.innerHTML = "<p style='text-align: center;'>Searching...</p>";
 
             fetch(url)
                 .then(res => res.text())
                 .then(data => {
-                    // Clean the Google Sheets JSON response (starts with "/* google.visualization.Query.setResponse...")
                     const json = JSON.parse(data.substr(47).slice(0, -2));
                     const rows = json.table.rows;
+
+                    // Extract Headers from the very first row (index 0)
+                    const headers = rows[0].c.map(cell => (cell && cell.v) ? cell.v.toString() : "Detail");
 
                     container.innerHTML = "";
                     let foundAnyMatch = false;
 
-                    rows.forEach((row, rowIndex) => {
-                        // Optional: Skip header row if necessary.
-                        // if (rowIndex === 0) return; 
+                    // Start loop from index 1 to skip header row in display
+                    for (let i = 1; i < rows.length; i++) {
+                        const row = rows[i];
 
+                        // Check if any cell in this row matches the search
                         const rowMatches = row.c.some(cell => {
                             if (!cell || !cell.v) return false;
                             return cell.v.toString().toLowerCase().includes(userInput);
@@ -235,11 +236,12 @@
 
                             let cardContent = "";
                             row.c.forEach((cell, index) => {
-                                // Default labels based on common column index
-                                let labelText = (index === 0) ? "Name/Bank" : (index === 1) ? "Email ID" : `Detail ${index + 1}`;
-                                const value = cell ? cell.v : "N/A";
+                                // Use the header name from the first row as the label
+                                const labelText = headers[index] || `Field ${index + 1}`;
+                                const value = (cell && cell.v !== null) ? cell.v : "N/A";
+
                                 cardContent += `
-                                    <div style="margin-bottom:10px;">
+                                    <div>
                                         <span class="data-label">${labelText}</span>
                                         <span class="data-value">${value}</span>
                                     </div>`;
@@ -248,15 +250,15 @@
                             card.innerHTML = cardContent;
                             container.appendChild(card);
                         }
-                    });
+                    }
 
                     if (!foundAnyMatch) {
-                        container.innerHTML = `<div style="text-align:center; color:red; font-weight:bold; width:100%;">NO DATA FOUND IN ${selectedSheetName}</div>`;
+                        container.innerHTML = `<div style="text-align:center; color:red; font-weight:bold; width:100%; padding: 20px;">NO DATA FOUND RELATED TO YOUR SEARCH</div>`;
                     }
                 })
                 .catch(err => {
                     console.error(err);
-                    container.innerHTML = "<p style='color:red; text-align:center;'>Error fetching data. Ensure the Sheet names match exactly (Sheet1, Sheet2, Sheet3).</p>";
+                    container.innerHTML = "<p style='color:red; text-align:center;'>Error fetching data. Ensure sheet names (Sheet1, Sheet2, Sheet3) are correct.</p>";
                 });
         });
     </script>
