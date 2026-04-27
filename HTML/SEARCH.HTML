@@ -109,7 +109,6 @@
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
             border-left: 5px solid #1a73e8;
             transition: all 0.3s ease;
-            /* CRITICAL: Text Wrapping */
             word-wrap: break-word;
             overflow-wrap: break-word;
             word-break: break-word;
@@ -197,7 +196,11 @@
                     container.innerHTML = "";
                     let foundAnyMatch = false;
 
-                    rows.forEach(row => {
+                    // UPDATED: Added 'rowIndex' to skip the first row
+                    rows.forEach((row, rowIndex) => {
+                        // Skip the first row (Index 0)
+                        if (rowIndex === 0) return;
+
                         const rowMatches = row.c.some(cell => {
                             if (!cell || !cell.v) return false;
                             return cell.v.toString().toLowerCase().includes(userInput);
@@ -210,7 +213,6 @@
 
                             let cardContent = "";
                             row.c.forEach((cell, index) => {
-                                // UPDATE: Specific Labels for Index 0 and 1
                                 let labelText = "";
                                 if (index === 0) labelText = "Bank Name";
                                 else if (index === 1) labelText = "Bank email id";
