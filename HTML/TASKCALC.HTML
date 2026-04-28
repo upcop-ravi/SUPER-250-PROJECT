@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multi-Calculator App</title>
+    <link rel="stylesheet" href="TASKCALC.CSS">
+</head>
+
+<body>
+
+    <div class="container">
+        <!-- Left Side: Controls -->
+        <aside class="sidebar">
+            <h2>Select Tool</h2>
+            <form id="calc-menu">
+                <!-- New Grouping Div -->
+                <div class="radio-group">
+                    <label class="radio-item">
+                        <input type="radio" name="calc-option" value="math" checked> Math Calculator
+                    </label>
+                    <label class="radio-item">
+                        <input type="radio" name="calc-option" value="scientific"> Scientific Calculator
+                    </label>
+                    <label class="radio-item">
+                        <input type="radio" name="calc-option" value="fraction"> Fraction Calculator
+                    </label>
+                    <label class="radio-item">
+                        <input type="radio" name="calc-option" value="percentage"> Percentage Calculator
+                    </label>
+                    <label class="radio-item">
+                        <input type="radio" name="calc-option" value="random"> Random Number Generator
+                    </label>
+                    <label class="radio-item">
+                        <input type="radio" name="calc-option" value="triangle"> Triangle Calculator
+                    </label>
+                    <label class="radio-item">
+                        <input type="radio" name="calc-option" value="std_dev"> Standard Deviation Calculator
+                    </label>
+                </div>
+            </form>
+        </aside>
+
+
+        <!-- Right Side: Display -->
+        <main class="output-panel" id="display-area">
+            <div id="output-content">
+                <h1>Welcome</h1>
+                <p>Select an option on the left to start calculating.</p>
+            </div>
+        </main>
+    </div>
+
+    <script src="TASKCALC.JS"></script>
+</body>
+
+</html>
