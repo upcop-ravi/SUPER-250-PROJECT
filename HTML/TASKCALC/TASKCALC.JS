@@ -8,28 +8,36 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Math Calculator UI
     const mathCalcHTML = `
-        <div class="calculator-ui">
-            <input type="text" id="calc-screen" readonly value="0">
-            <div class="calc-buttons">
-                <button class="btn clear" onclick="clearScreen()">C</button>
-                <button class="btn" onclick="press('/')">÷</button>
-                <button class="btn" onclick="press('*')">×</button>
-                <button class="btn" onclick="press('-')">−</button>
-                <button class="btn" onclick="press('7')">7</button>
-                <button class="btn" onclick="press('8')">8</button>
-                <button class="btn" onclick="press('9')">9</button>
-                <button class="btn plus" onclick="press('+')">+</button>
-                <button class="btn" onclick="press('4')">4</button>
-                <button class="btn" onclick="press('5')">5</button>
-                <button class="btn" onclick="press('6')">6</button>
-                <button class="btn" onclick="press('1')">1</button>
-                <button class="btn" onclick="press('2')">2</button>
-                <button class="btn" onclick="press('3')">3</button>
-                <button class="btn equal" onclick="calculate()">=</button>
-                <button class="btn zero" onclick="press('0')">0</button>
-                <button class="btn" onclick="press('.')">.</button>
-            </div>
-        </div>`;
+    <div class="calculator-ui">
+        <input type="text" id="calc-screen" readonly value="0">
+        <div class="calc-buttons">
+            <button class="btn" onclick="clearScreen()">AC</button>
+            <button class="btn" onclick="backspace()">Back</button>
+            <button class="btn" onclick="press('%')">%</button>
+            <button class="btn" onclick="press('/')">/</button>
+            
+            <button class="btn" onclick="press('7')">7</button>
+            <button class="btn" onclick="press('8')">8</button>
+            <button class="btn" onclick="press('9')">9</button>
+            <button class="btn" onclick="press('*')">*</button>
+            
+            <button class="btn" onclick="press('4')">4</button>
+            <button class="btn" onclick="press('5')">5</button>
+            <button class="btn" onclick="press('6')">6</button>
+            <button class="btn" onclick="press('-')">-</button>
+            
+            <button class="btn" onclick="press('1')">1</button>
+            <button class="btn" onclick="press('2')">2</button>
+            <button class="btn" onclick="press('3')">3</button>
+            <button class="btn" onclick="press('+')">+</button>
+            
+            <button class="btn zero" onclick="press('0')">0</button>
+            <button class="btn" onclick="press('.')">.</button>
+            <button class="btn equal" onclick="calculate()">=</button>
+        </div>
+    </div>
+`;
+
 
     // Scientific Calculator UI
     const scientificCalcHTML = `
@@ -228,5 +236,13 @@ function calcSD() {
     const mean = array.reduce((a, b) => a + b) / n;
     const deviation = Math.sqrt(array.map(x => Math.pow(x - mean, 2)).reduce((a, b) => a + b) / n);
     document.getElementById('sd-result').innerText = `σ = ${deviation.toFixed(4)}`;
+}
+function backspace() {
+    const screen = document.getElementById('calc-screen');
+    if (screen.value.length > 1) {
+        screen.value = screen.value.slice(0, -1);
+    } else {
+        screen.value = "0";
+    }
 }
 
