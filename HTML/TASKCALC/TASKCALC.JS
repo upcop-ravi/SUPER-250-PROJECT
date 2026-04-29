@@ -184,8 +184,6 @@ function sciOp(type) {
         case 'exp': screen.value = Math.exp(val).toFixed(4); break;
     }
 }
-
-/*
 // --- Triangle Logic ---
 function calcTriangle() {
     const a = document.getElementById('t-a').value;
@@ -193,6 +191,7 @@ function calcTriangle() {
     const c = Math.sqrt(Math.pow(a, 2) + Math.pow(b, 2));
     document.getElementById('t-result').innerText = `C = ${c.toFixed(2)}`;
 }
+/*
 // --- Fraction Logic ---
 function calcFraction() {
     const n1 = parseInt(document.getElementById('f1-num').value);
