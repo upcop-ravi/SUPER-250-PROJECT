@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Multi Calculator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="VOICECALC.CSS">
+</head>
+
+<body>
+    <div class="container">
+        <!-- Left side: radio buttons -->
+        <div class="sidebar">
+            <h2>Select Calculator</h2>
+            <label><input type="radio" name="calcType" value="arithmetic" checked> Arithmetic Calculator</label><br>
+            <label><input type="radio" name="calcType" value="scientific"> Scientific Calculator</label><br>
+            <label><input type="radio" name="calcType" value="triangle"> Triangle Calculator</label>
+        </div>
+
+        <!-- Right side: calculator output -->
+        <div class="main">
+            <!-- Arithmetic Calculator -->
+            <div id="arithmeticCalc" class="calc-section">
+                <h2>Arithmetic Calculator</h2>
+                <input type="text" id="arithDisplay" readonly>
+                <div class="buttons">
+                    <button onclick="appendArith('1')">1</button>
+                    <button onclick="appendArith('2')">2</button>
+                    <button onclick="appendArith('3')">3</button>
+                    <button onclick="appendArith('+')">+</button>
+                    <button onclick="appendArith('4')">4</button>
+                    <button onclick="appendArith('5')">5</button>
+                    <button onclick="appendArith('6')">6</button>
+                    <button onclick="appendArith('-')">-</button>
+                    <button onclick="appendArith('7')">7</button>
+                    <button onclick="appendArith('8')">8</button>
+                    <button onclick="appendArith('9')">9</button>
+                    <button onclick="appendArith('*')">*</button>
+                    <button onclick="appendArith('0')">0</button>
+                    <button onclick="appendArith('/')">/</button>
+                    <button onclick="calculateArith()">=</button>
+                    <button onclick="clearArith()">C</button>
+                </div>
+                <button id="voiceArith" class="voice-btn">🎤 Voice Input</button>
+            </div>
+
+            <!-- Scientific Calculator -->
+            <div id="scientificCalc" class="calc-section hidden">
+                <h2>Scientific Calculator</h2>
+                <input type="text" id="sciDisplay" readonly>
+                <div class="buttons">
+                    <button onclick="appendSci('Math.sin(')">sin</button>
+                    <button onclick="appendSci('Math.cos(')">cos</button>
+                    <button onclick="appendSci('Math.tan(')">tan</button>
+                    <button onclick="appendSci('Math.log(')">log</button>
+                    <button onclick="appendSci('Math.sqrt(')">√</button>
+                    <button onclick="appendSci('**')">^</button>
+                    <button onclick="calculateSci()">=</button>
+                    <button onclick="clearSci()">C</button>
+                </div>
+                <button id="voiceSci" class="voice-btn">🎤 Voice Input</button>
+            </div>
+
+            <!-- Triangle Calculator -->
+            <div id="triangleCalc" class="calc-section hidden">
+                <h2>Triangle Calculator</h2>
+                <label>Side A: <input type="number" id="sideA"></label><br>
+                <label>Side B: <input type="number" id="sideB"></label><br>
+                <button onclick="calculateTriangle()">Calculate Hypotenuse</button>
+                <p id="triangleResult"></p>
+                <button id="voiceTriangle" class="voice-btn">🎤 Voice Input</button>
+            </div>
+        </div>
+    </div>
+    <script src="VOICECALC.JS"></script>
+</body>
+
+</html>

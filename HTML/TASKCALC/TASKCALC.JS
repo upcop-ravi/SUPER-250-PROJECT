@@ -48,29 +48,32 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
             <input type="text" id="calc-screen" readonly value="0">
             <div class="calc-buttons sci-grid">
+            <button class="btn" onclick="press('7')">7</button>
+                <button class="btn" onclick="press('8')">8</button>
+                <button class="btn" onclick="press('9')">9</button>
                 <button class="btn sci-fn" onclick="sciOp('sin')">sin</button>
                 <button class="btn sci-fn" onclick="sciOp('cos')">cos</button>
                 <button class="btn sci-fn" onclick="sciOp('tan')">tan</button>
                 <button class="btn clear" onclick="clearScreen()">C</button>
-                <button class="btn sci-fn" onclick="sciOp('sqrt')">√</button>
-                <button class="btn sci-fn" onclick="sciOp('log')">log</button>
-                <button class="btn sci-fn" onclick="sciOp('exp')">exp</button>
-                <button class="btn" onclick="press('/')">÷</button>
-                <button class="btn" onclick="press('7')">7</button>
-                <button class="btn" onclick="press('8')">8</button>
-                <button class="btn" onclick="press('9')">9</button>
-                <button class="btn" onclick="press('*')">×</button>
                 <button class="btn" onclick="press('4')">4</button>
                 <button class="btn" onclick="press('5')">5</button>
                 <button class="btn" onclick="press('6')">6</button>
-                <button class="btn" onclick="press('-')">−</button>
+                <button class="btn sci-fn" onclick="sciOp('sqrt')">√</button>
+                <button class="btn sci-fn" onclick="sciOp('log')">log</button>
+                <button class="btn sci-fn" onclick="sciOp('exp')">exp</button>
+                <button class="btn" onclick="press('%')">%</button>
                 <button class="btn" onclick="press('1')">1</button>
                 <button class="btn" onclick="press('2')">2</button>
                 <button class="btn" onclick="press('3')">3</button>
-                <button class="btn" onclick="press('+')">+</button>
+                <button class="btn" onclick="press('(')">(</button>
+                <button class="btn" onclick="press(')')">)</button>
+                <button class="btn" onclick="press('*')">×</button>
+                <button class="btn" onclick="press('/')">÷</button>
                 <button class="btn zero" onclick="press('0')">0</button>
                 <button class="btn" onclick="press('.')">.</button>
-                <button class="btn equal" onclick="calculate()">=</button>
+                <button class="btn" onclick="press('-')">−</button>
+                <button class="btn" onclick="press('+')">+</button>
+                <button class="btn equalresult" onclick="calculate()">RESULT</button>
             </div>
         </div>`;
 
