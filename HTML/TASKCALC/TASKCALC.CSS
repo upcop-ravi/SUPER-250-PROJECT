@@ -215,34 +215,173 @@ h3 {
     font-family: monospace;
 }
 
-.sci-calculator {
-    width: 100%;
-    max-width: 500px;
-    margin: 0 auto;
+/* Global Reset */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-.sci-display {
-    background: #fff;
+/* 1. Responsive Container */
+.container {
+    display: flex;
+    height: 100vh;
+    width: 100vw;
+    transition: flex-direction 0.3s ease;
+}
+
+/* 2. Sidebar & Output Panel Base Styles */
+.sidebar {
+    flex: 2;
+    background-color: #f4f4f9;
+    border-right: 2px solid #ddd;
     padding: 20px;
-    font-size: 2rem;
-    text-align: right;
-    border-radius: 10px;
-    margin-bottom: 20px;
-    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
 }
 
-.sci-grid {
+.output-panel {
+    flex: 5;
+    background-color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+/* --- RESPONSIVE BREAKPOINT (Mobile & Tablet) --- */
+@media (max-width: 1024px) {
+    .container {
+        flex-direction: column;
+        /* Stack vertically */
+    }
+
+    .sidebar {
+        flex: none;
+        height: auto;
+        border-right: none;
+        border-bottom: 2px solid #ddd;
+        padding: 15px;
+    }
+
+    .output-panel {
+        flex: 1;
+        justify-content: flex-start;
+        /* Move calculator up on small screens */
+        padding-top: 30px;
+    }
+
+    .radio-group {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .radio-item {
+        margin-bottom: 0;
+        flex: 1 1 150px;
+        /* Allow items to sit side-by-side if space allows */
+    }
+}
+
+/* 3. Calculator UI Responsive Scaling */
+.calculator-ui {
+    background: #333;
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    width: 100%;
+    max-width: 350px;
+    /* Desktop width */
+}
+
+/* Scale Scientific UI specifically */
+.sci-ui {
+    max-width: 600px;
+    /* Scientific needs more room for 7 columns */
+    width: 95%;
+}
+
+/* 4. Display Screen Scaling */
+#calc-screen,
+.sci-display {
+    width: 100%;
+    height: 60px;
+    background: #222;
+    color: #0f0;
+    border: none;
+    font-size: 1.8rem;
+    text-align: right;
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 10px;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+/* 5. Button Grid Responsiveness */
+.calc-buttons {
     display: grid;
-    grid-template-columns: repeat(7, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap: 8px;
 }
 
-.sci-grid button {
-    padding: 15px 5px;
+/* Scientific Grid (The 7-column layout) */
+.sci-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 6px;
+}
+
+.btn {
+    height: 55px;
+    border-radius: 8px;
     border: none;
-    border-radius: 5px;
+    background: #555;
+    color: white;
+    font-size: 1rem;
     cursor: pointer;
-    font-weight: bold;
+    transition: 0.2s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Mobile Specific Adjustments for Buttons */
+@media (max-width: 480px) {
+    .btn {
+        height: 45px;
+        font-size: 0.85rem;
+    }
+
+    .sci-ui {
+        padding: 10px;
+    }
+
+    .sci-grid {
+        gap: 4px;
+    }
+
+    .sci-grid .btn {
+        font-size: 0.7rem;
+        /* Make text smaller to fit labels like "sqrt" */
+        padding: 5px 2px;
+    }
+
+    #calc-screen {
+        font-size: 1.5rem;
+        height: 50px;
+    }
+}
+
+/* Button Variants */
+.btn.clear {
+    background: #e74c3c;
+}
+
+.btn.equal {
+    background: #2ecc71;
 }
 
 .btn-func {
@@ -250,11 +389,20 @@ h3 {
     color: #4c6ef5;
 }
 
-.btn-num {
-    background: #fff;
+/* Pythagoras/Triangle Input Styles */
+.input-row {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 15px;
 }
 
-.btn-eq {
-    background: #4c6ef5;
-    color: #fff;
+.calculator-ui input[type="number"] {
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #444;
+    background: #222;
+    color: white;
 }

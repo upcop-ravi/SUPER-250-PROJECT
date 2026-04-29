@@ -45,68 +45,6 @@
                     <label class="radio-item">
                         <input type="radio" name="calc-option" value="std_dev"> Standard Deviation Calculator
                     </label> -->
-                    <!-- Inside the <main class="output-panel" id="display-area"> -->
-                    <main class="output-panel" id="display-area">
-                        <div id="output-content">
-                            <!-- Default Welcome Message -->
-                            <div id="welcome-screen">
-                                <h1>Welcome</h1>
-                                <p>Select an option on the left to start calculating.</p>
-                            </div>
-
-                            <!-- Scientific Calculator UI (Hidden by default) -->
-                            <div id="scientific-ui" style="display: none;">
-                                <div class="sci-calculator">
-                                    <div class="sci-display" id="sci-display">0</div>
-                                    <div class="sci-grid">
-                                        <button class="btn-func" onclick="handleSci('inv')">Inv</button>
-                                        <button class="btn-func" onclick="handleSci('deg')">Deg</button>
-                                        <button class="btn-func" onclick="appendSci('!')">x!</button>
-                                        <button class="btn-func" onclick="appendSci('(')">(</button>
-                                        <button class="btn-func" onclick="appendSci(')')">)</button>
-                                        <button class="btn-func" onclick="clearSci()">C</button>
-                                        <button class="btn-func" onclick="backSci()">⌫</button>
-
-                                        <!-- Row 2 -->
-                                        <button class="btn-func" onclick="handleSci('ln')">ln</button>
-                                        <button class="btn-func" onclick="handleSci('sin')">sin</button>
-                                        <button class="btn-func" onclick="appendSci('%')">%</button>
-                                        <button class="btn-num" onclick="appendSci('7')">7</button>
-                                        <button class="btn-num" onclick="appendSci('8')">8</button>
-                                        <button class="btn-num" onclick="appendSci('9')">9</button>
-                                        <button class="btn-func" onclick="appendSci('/')">÷</button>
-
-                                        <!-- Add remaining rows here following the same pattern -->
-                                        <button class="btn-func" onclick="handleSci('log')">log</button>
-                                        <button class="btn-func" onclick="handleSci('cos')">cos</button>
-                                        <button class="btn-func" onclick="handleSci('sqrt')">√</button>
-                                        <button class="btn-num" onclick="appendSci('4')">4</button>
-                                        <button class="btn-num" onclick="appendSci('5')">5</button>
-                                        <button class="btn-num" onclick="appendSci('6')">6</button>
-                                        <button class="btn-func" onclick="appendSci('*')">×</button>
-
-                                        <button class="btn-func" onclick="appendSci('^')">^</button>
-                                        <button class="btn-func" onclick="handleSci('tan')">tan</button>
-                                        <button class="btn-func" onclick="handleSci('invX')">1/x</button>
-                                        <button class="btn-num" onclick="appendSci('1')">1</button>
-                                        <button class="btn-num" onclick="appendSci('2')">2</button>
-                                        <button class="btn-num" onclick="appendSci('3')">3</button>
-                                        <button class="btn-func" onclick="appendSci('-')">-</button>
-
-                                        <button class="btn-func" onclick="handleSci('exp')">Exp</button>
-                                        <button class="btn-func" onclick="appendSci('Math.PI')">π</button>
-                                        <button class="btn-func" onclick="appendSci('Math.E')">e</button>
-                                        <button class="btn-num" onclick="appendSci('0')">0</button>
-                                        <button class="btn-num" onclick="appendSci('.')">.</button>
-                                        <button class="btn-eq" onclick="calculateSci()">=</button>
-                                        <button class="btn-func" onclick="appendSci('+')">+</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </main>
-
-
                 </div>
             </form>
         </aside>
