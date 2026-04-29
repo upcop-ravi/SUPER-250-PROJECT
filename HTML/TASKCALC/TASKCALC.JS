@@ -184,6 +184,15 @@ function sciOp(type) {
         case 'exp': screen.value = Math.exp(val).toFixed(4); break;
     }
 }
+
+/*
+// --- Triangle Logic ---
+function calcTriangle() {
+    const a = document.getElementById('t-a').value;
+    const b = document.getElementById('t-b').value;
+    const c = Math.sqrt(Math.pow(a, 2) + Math.pow(b, 2));
+    document.getElementById('t-result').innerText = `C = ${c.toFixed(2)}`;
+}
 // --- Fraction Logic ---
 function calcFraction() {
     const n1 = parseInt(document.getElementById('f1-num').value);
@@ -218,26 +227,21 @@ function calcRandom() {
     const res = Math.floor(Math.random() * (max - min + 1)) + min;
     document.getElementById('r-result').innerText = res;
 }
-
-// --- Triangle Logic ---
-function calcTriangle() {
-    const a = document.getElementById('t-a').value;
-    const b = document.getElementById('t-b').value;
-    const c = Math.sqrt(Math.pow(a, 2) + Math.pow(b, 2));
-    document.getElementById('t-result').innerText = `C = ${c.toFixed(2)}`;
-}
-
 // --- Standard Deviation Logic ---
 
-//function calcSD() {
-//   const input = document.getElementById('sd-input').value;
-//   const array = input.split(',').map(Number).filter(n => !isNaN(n));
-//  const n = array.length;
-//  if (n < 1) return;
-//  const mean = array.reduce((a, b) => a + b) / n;
-//   const deviation = Math.sqrt(array.map(x => Math.pow(x - mean, 2)).reduce((a, b) => a + b) / n);
-//   document.getElementById('sd-result').innerText = `σ = ${deviation.toFixed(4)}`;
-//}
+function calcSD() {
+   const input = document.getElementById('sd-input').value;
+  const array = input.split(',').map(Number).filter(n => !isNaN(n));
+  const n = array.length;
+  if (n < 1) return;
+  const mean = array.reduce((a, b) => a + b) / n;
+   const deviation = Math.sqrt(array.map(x => Math.pow(x - mean, 2)).reduce((a, b) => a + b) / n);
+   document.getElementById('sd-result').innerText = `σ = ${deviation.toFixed(4)}`;
+}*/
+
+
+
+
 
 function backspace() {
     const screen = document.getElementById('calc-screen');
