@@ -250,4 +250,66 @@ function backspace() {
         screen.value = "0";
     }
 }
+const menu = document.getElementById('calc-menu');
+const sciUI = document.getElementById('scientific-ui');
+const welcomeScreen = document.getElementById('welcome-screen');
+const sciDisplay = document.getElementById('sci-display');
+let sciInput = '0';
+
+// Switcher Logic
+menu.addEventListener('change', (e) => {
+    const selected = e.target.value;
+
+    // Hide everything first
+    welcomeScreen.style.display = 'none';
+    sciUI.style.display = 'none';
+
+    // Show selected
+    if (selected === 'scientific') {
+        sciUI.style.display = 'block';
+    } else if (selected === 'math') {
+        // Logic for your arithmetic calculator...
+    }
+});
+
+// Scientific Logic Functions
+function appendSci(val) {
+    if (sciInput === '0' && val !== '.') sciInput = '';
+    sciInput += val;
+    updateSciDisplay();
+}
+
+function clearSci() {
+    sciInput = '0';
+    updateSciDisplay();
+}
+
+function backSci() {
+    sciInput = sciInput.length > 1 ? sciInput.slice(0, -1) : '0';
+    updateSciDisplay();
+}
+
+function updateSciDisplay() {
+    sciDisplay.innerText = sciInput.replace(/Math.PI/g, 'π').replace(/Math.E/g, 'e');
+}
+
+function calculateSci() {
+    try {
+        let result = eval(sciInput.replace(/\^/g, '**').replace(/×/g, '*').replace(/÷/g, '/'));
+        sciInput = result.toString();
+        updateSciDisplay();
+    } catch {
+        sciDisplay.innerText = "Error";
+        sciInput = '0';
+    }
+}
+
+function handleSci(type) {
+    let val = parseFloat(sciInput);
+    if (type === 'sin') sciInput = Math.sin(val).toString();
+    if (type === 'cos') sciInput = Math.cos(val).toString();
+    if (type === 'sqrt') sciInput = Math.sqrt(val).toString();
+    // Add other math functions here...
+    updateSciDisplay();
+}
 
