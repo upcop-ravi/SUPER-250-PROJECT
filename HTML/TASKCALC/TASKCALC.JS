@@ -228,15 +228,17 @@ function calcTriangle() {
 }
 
 // --- Standard Deviation Logic ---
-function calcSD() {
-    const input = document.getElementById('sd-input').value;
-    const array = input.split(',').map(Number).filter(n => !isNaN(n));
-    const n = array.length;
-    if (n < 1) return;
-    const mean = array.reduce((a, b) => a + b) / n;
-    const deviation = Math.sqrt(array.map(x => Math.pow(x - mean, 2)).reduce((a, b) => a + b) / n);
-    document.getElementById('sd-result').innerText = `σ = ${deviation.toFixed(4)}`;
-}
+
+//function calcSD() {
+//   const input = document.getElementById('sd-input').value;
+//   const array = input.split(',').map(Number).filter(n => !isNaN(n));
+//  const n = array.length;
+//  if (n < 1) return;
+//  const mean = array.reduce((a, b) => a + b) / n;
+//   const deviation = Math.sqrt(array.map(x => Math.pow(x - mean, 2)).reduce((a, b) => a + b) / n);
+//   document.getElementById('sd-result').innerText = `σ = ${deviation.toFixed(4)}`;
+//}
+
 function backspace() {
     const screen = document.getElementById('calc-screen');
     if (screen.value.length > 1) {
