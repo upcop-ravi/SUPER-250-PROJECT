@@ -87,4 +87,16 @@ document.getElementById('voiceArith').addEventListener('click', () => {
 });
 
 // Voice for Scientific
-document.getElementById('voiceSci').
+document.getElementById('voiceSci').addEventListener('click', () => {
+    startVoiceRecognition(text => {
+        document.getElementById('sciDisplay').value = text;
+        calculateSci();
+    });
+});
+// Voice for Triangle
+document.getElementById('voiceTriangle').addEventListener('click', () => {
+    startVoiceRecognition(text => {
+        document.getElementById('triangleDisplay').value = text;
+        calculateTriangle();
+    });
+});
