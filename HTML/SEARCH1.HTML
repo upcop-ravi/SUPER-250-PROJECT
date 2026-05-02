@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bank Search Portal</title>
+    <style>
+        body,
+        html {
+            height: 100%;
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f2f5;
+        }
+
+        .main-wrapper {
+            display: flex;
+            flex-direction: row;
+            height: 100vh;
+            width: 100%;
+        }
+
+        .left-panel {
+            flex: 0 0 350px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-right: 1px solid #ddd;
+            background-color: #ffffff;
+            z-index: 10;
+        }
+
+        .search-container {
+            padding: 20px;
+            text-align: center;
+            width: 90%;
+        }
+
+        .radio-group {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 12px;
+            border: 1px solid #dfe1e5;
+        }
+
+        .radio-option {
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+            color: #3c4043;
+            cursor: pointer;
+            font-weight: 500;
+            margin: 5px 0;
+        }
+
+        .radio-option input {
+            margin-right: 10px;
+        }
+
+        label.search-label {
+            font-size: 1.1rem;
+            color: #1a73e8;
+            display: block;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #dfe1e5;
+            border-radius: 24px;
+            font-size: 16px;
+            outline: none;
+            box-sizing: border-box;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 15px;
+            background-color: #1a73e8;
+            color: white;
+            border: none;
+            border-radius: 24px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .right-panel {
+            flex: 1;
+            padding: 20px;
+            background-color: #f8f9fa;
+            overflow-y: auto;
+        }
+
+        h2 {
+            margin-top: 0;
+            font-size: 1.2rem;
+            color: #3c4043;
+            border-bottom: 3px solid #1a73e8;
+            display: inline-block;
+            padding-bottom: 5px;
+        }
+
+        .card-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 15px;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+            border-left: 5px solid #1a73e8;
+            word-wrap: break-word;
+        }
+
+        .data-label {
+            font-weight: bold;
+            color: #1a73e8;
+            text-transform: uppercase;
+            font-size: 10px;
+            display: block;
+            margin-bottom: 2px;
+        }
+
+        .data-value {
+            font-size: 14px;
+            color: #202124;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .main-wrapper {
+                flex-direction: column;
+                height: auto;
+            }
+
+            .left-panel {
+                flex: none;
+                width: 100%;
+                border-right: none;
+                border-bottom: 1px solid #ddd;
+                padding: 20px 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="main-wrapper">
+        <div class="left-panel">
+            <div class="search-container">
+                <div class="radio-group">
+                    <label class="radio-option">
+                        <input type="radio" name="category" value="Sheet1" checked> Banks
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="category" value="Sheet2"> TPAP
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="category" value="Sheet3"> Wallet & PPI
+                    </label>
+                </div>
+
+                <label class="search-label" for="keyword">Search Bank Nodal Email</label>
+                <input type="text" id="keyword" placeholder="Enter keyword...">
+                <button id="searchBtn">Search</button>
+            </div>
+        </div>
+
+        <div class="right-panel">
+            <h2>SEARCH RESULTS</h2>
+            <div id="cardContainer" class="card-container">
+                <p style="color: #70757a; text-align: center;">Results will appear here...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const sheetID = "1VPD21zY1KbFAC9-OOdGKndZBy_YhYUMH7dbNm3U06Q4";
+        const searchBtn = document.getElementById('searchBtn');
+        const keywordInput = document.getElementById('keyword');
+        const container = document.getElementById('cardContainer');
+
+        searchBtn.addEventListener('click', () => {
+            const userInput = keywordInput.value.toLowerCase().trim();
+            const selectedSheetName = document.querySelector('input[name="category"]:checked').value;
+            const url = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?sheet=${selectedSheetName}`;
+
+            if (!userInput) {
+                container.innerHTML = "<p style='color: orange; text-align: center;'>Please enter a keyword.</p>";
+                return;
+            }
+
+            container.innerHTML = "<p style='text-align: center;'>Searching...</p>";
+
+            fetch(url)
+                .then(res => res.text())
+                .then(data => {
+                    const json = JSON.parse(data.substr(47).slice(0, -2));
+                    const rows = json.table.rows;
+
+                    // Extract Headers from the very first row (index 0)
+                    const headers = rows[0].c.map(cell => (cell && cell.v) ? cell.v.toString() : "Detail");
+
+                    container.innerHTML = "";
+                    let foundAnyMatch = false;
+
+                    // Start loop from index 1 to skip header row in display
+                    for (let i = 1; i < rows.length; i++) {
+                        const row = rows[i];
+
+                        // Check if any cell in this row matches the search
+                        const rowMatches = row.c.some(cell => {
+                            if (!cell || !cell.v) return false;
+                            return cell.v.toString().toLowerCase().includes(userInput);
+                        });
+
+                        if (rowMatches) {
+                            foundAnyMatch = true;
+                            const card = document.createElement("div");
+                            card.className = "card";
+
+                            let cardContent = "";
+                            row.c.forEach((cell, index) => {
+                                // Use the header name from the first row as the label
+                                const labelText = headers[index] || `Field ${index + 1}`;
+                                const value = (cell && cell.v !== null) ? cell.v : "N/A";
+
+                                cardContent += `
+                                    <div>
+                                        <span class="data-label">${labelText}</span>
+                                        <span class="data-value">${value}</span>
+                                    </div>`;
+                            });
+
+                            card.innerHTML = cardContent;
+                            container.appendChild(card);
+                        }
+                    }
+
+                    if (!foundAnyMatch) {
+                        container.innerHTML = `<div style="text-align:center; color:red; font-weight:bold; width:100%; padding: 20px;">NO DATA FOUND RELATED TO YOUR SEARCH</div>`;
+                    }
+                })
+                .catch(err => {
+                    console.error(err);
+                    container.innerHTML = "<p style='color:red; text-align:center;'>Error fetching data. Ensure sheet names (Sheet1, Sheet2, Sheet3) are correct.</p>";
+                });
+        });
+    </script>
+</body>
+
+</html>
